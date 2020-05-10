@@ -184,7 +184,7 @@
                 <layoutConstraint xmi:type="notation:Bounds" xmi:id="_VTk9YZLXEeqV09hpQz7Ynw"/>
               </children>
               <element xmi:type="uml:State" href="Barracuda-RT.uml#_VTcagJLXEeqV09hpQz7Ynw"/>
-              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_VTh6EZLXEeqV09hpQz7Ynw" x="255" y="100"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_VTh6EZLXEeqV09hpQz7Ynw" x="288" y="136"/>
             </children>
             <layoutConstraint xmi:type="notation:Bounds" xmi:id="_SE73L5LXEeqV09hpQz7Ynw"/>
           </children>
