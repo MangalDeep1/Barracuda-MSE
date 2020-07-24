@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+clock DiagTime;
+clock DeployTime;
+clock RetractTime;
+clock MissionTime;
+
+chan Retracted;
+chan Deploy;
+chan BotFull;
+chan tetract;
+chan MissionComplete;
+chan idle;</declaration>
+	<template>
+		<name x="5" y="5">Master</name>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id0" x="-2540" y="-1895">
+			<name x="-2620" y="-1903">Retracted</name>
+		</location>
+		<location id="id1" x="-1956" y="-1887">
+			<name x="-1932" y="-1895">Serve</name>
+			<label kind="invariant" x="-1966" y="-1872">MissionTime&lt;=15</label>
+		</location>
+		<location id="id2" x="-2252" y="-1887">
+			<name x="-2284" y="-1863">Retract</name>
+			<label kind="invariant" x="-2308" y="-1847">RetractTime&lt;=5</label>
+		</location>
+		<location id="id3" x="-2252" y="-2031">
+			<name x="-2262" y="-2061">Diagnostic</name>
+			<label kind="invariant" x="-2284" y="-2079">DiagTime &lt;=3</label>
+		</location>
+		<location id="id4" x="-1964" y="-2031">
+			<name x="-1974" y="-2061">Deployed</name>
+			<label kind="invariant" x="-1948" y="-2039">DeployTime&lt;=3</label>
+		</location>
+		<location id="id5" x="-2540" y="-2039">
+			<name x="-2596" y="-2079">MasterInit</name>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-2600" y="-1982">idle!</label>
+			<label kind="assignment" x="-2636" y="-1999">RetractTime:=0</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-2476" y="-1887">RetractTime&gt;=2</label>
+			<label kind="synchronisation" x="-2444" y="-1919">tetract!</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-2150" y="-1912">MissionComplete?</label>
+			<label kind="assignment" x="-2133" y="-1887">RetractTime:=0</label>
+			<nail x="-2091" y="-1887"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-1964" y="-1975">DeployTime&gt;=3</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-2337" y="-1997">DiagTime&gt;=5</label>
+			<label kind="assignment" x="-2354" y="-1972">RetractTime:=0</label>
+			<nail x="-2249" y="-1965"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-2156" y="-2031">Deploy!</label>
+			<label kind="assignment" x="-2148" y="-2055">DeployTime:=0</label>
+			<nail x="-2204" y="-2031"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="-2392" y="-2031">DiagTime :=0</label>
+			<nail x="-2268" y="-2031"/>
+			<nail x="-2268" y="-2031"/>
+		</transition>
+	</template>
+	<template>
+		<name>RescueCommunity</name>
+		<location id="id6" x="-1104" y="-624">
+			<name x="-1144" y="-664">SystemInit</name>
+		</location>
+		<init ref="id6"/>
+	</template>
+	<template>
+		<name>Slave</name>
+		<location id="id7" x="-1388" y="-868">
+			<name x="-1364" y="-868">MissionDone</name>
+		</location>
+		<location id="id8" x="-1188" y="-972">
+			<name x="-1198" y="-1002">GrabVictims</name>
+			<label kind="invariant" x="-1198" y="-957">MissionTime&lt;=8</label>
+		</location>
+		<location id="id9" x="-1388" y="-1020">
+			<name x="-1398" y="-1050">VictimsLocated</name>
+			<label kind="invariant" x="-1398" y="-1005">MissionTime&lt;=5</label>
+		</location>
+		<location id="id10" x="-1572" y="-868">
+			<name x="-1612" y="-852">EndDeployment</name>
+			<label kind="invariant" x="-1628" y="-836">MissionTime&lt;=20</label>
+		</location>
+		<location id="id11" x="-1572" y="-1020">
+			<name x="-1582" y="-1050">Deployed</name>
+			<label kind="invariant" x="-1628" y="-1068">DeployTime&lt;=3</label>
+		</location>
+		<location id="id12" x="-1868" y="-868">
+			<name x="-1956" y="-884">Retracted</name>
+			<label kind="invariant" x="-1948" y="-844">RetractTime&lt;=5</label>
+		</location>
+		<location id="id13" x="-1868" y="-1020">
+			<name x="-1878" y="-1050">SlaveInit</name>
+		</location>
+		<init ref="id13"/>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-1572" y="-956">Deploy?</label>
+			<nail x="-1572" y="-940"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-1516" y="-868">MissionComplete!</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id8"/>
+			<label kind="guard" x="-1348" y="-1026">MissionTime&lt;=5</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-1276" y="-924">MissionTime&lt;=10</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-1540" y="-1020">DeployTime&lt;=8</label>
+			<label kind="assignment" x="-1516" y="-1044">MissionTime:=0</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="-1908" y="-956">idle?</label>
+			<nail x="-1868" y="-964"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-1756" y="-892">tetract?</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-1740" y="-1039">Deploy?</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+ProcessM = Master();
+ProcessS = Slave();
+
+// List one or more processes to be composed into a system.
+system ProcessM,ProcessS;</system>
+	<queries>
+		<query>
+			<formula>E[] ProcessM.MasterInit &amp;&amp; ProcessS.SlaveInit</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; ProcessM.MasterInit &amp;&amp;  ProcessS.SlaveInit</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] ProcessM.Serve imply (MissionTime &gt;= 0 &amp;&amp; MissionTime &lt;= 15)</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>ProcessM.Diagnostic --&gt; ProcessM.Deployed &amp;&amp; ProcessS.Deployed</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>ProcessM.Retracted --&gt; ProcessS.Retracted</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
